@@ -70,6 +70,7 @@ class EditActivity : AppCompatActivity() {
         tempFilePath = " "
 
 
+
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -87,6 +88,7 @@ class EditActivity : AppCompatActivity() {
 
 
     private fun init() = with(binding){
+
         bNext.setOnClickListener {
             indexImage++
             if (indexImage>ImageList.size-1) indexImage = 0
@@ -128,6 +130,7 @@ class EditActivity : AppCompatActivity() {
                 ActivityCompat.requestPermissions(this@EditActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), READ_EXTERNAL_STORAGE_PERMISSION_REQUEST)}
             else{openImagePicker()}
         }
+        floatingActionButton4.setOnClickListener { finish() }
 
 
     }
