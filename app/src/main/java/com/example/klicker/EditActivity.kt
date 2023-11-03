@@ -41,6 +41,7 @@ class EditActivity : AppCompatActivity() {
             val imageUri = data?.data
             if (imageUri != null) {
 
+
                 // Отобразить выбранное изображение в ImageView
                 binding.imageView2.setImageURI(imageUri)
                 val selectedImage: Bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
@@ -66,7 +67,17 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), READ_EXTERNAL_STORAGE_PERMISSION_REQUEST)
+//        } else {
+//            // Разрешение уже предоставлено, выполните операции инициализации
+//            init()
+//        }
         init()
+        binding.floatingActionButton4.setOnClickListener { finish() }
+
+
+
         tempFilePath = " "
 
 
@@ -81,20 +92,20 @@ class EditActivity : AppCompatActivity() {
             } else {
                 // Пользователь отказал в предоставлении разрешения, обработайте это соответственно.
                 // Например, показав сообщение пользователю.
+
                 Toast.makeText(this, "Для доступа к галерее необходимо разрешение", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
 
-    private fun init() = with(binding){
+    private fun init() = with(binding) {
 
         bNext.setOnClickListener {
             indexImage++
-            if (indexImage>ImageList.size-1) indexImage = 0
+            if (indexImage > ImageList.size - 1) indexImage = 0
             ImageId = ImageList[indexImage]
             imageView2.setImageResource(ImageId)
-
 
 
         }
@@ -102,38 +113,59 @@ class EditActivity : AppCompatActivity() {
             ImageId = ImageList[indexImage]
             val title = edTitle.text.toString()
             val desc = edDescription.text.toString()
-            if(imagePass!=tempFilePath)
-            {
-            val selectedImage = BitmapFactory.decodeResource(resources, ImageId)
-            val tempFile = File.createTempFile("temp_image", ".jpg", cacheDir)
-            val tempFilePath = tempFile.absolutePath
-            val outputStream = FileOutputStream(tempFile)
-            selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.close()
-            imagePass = tempFilePath
+            if (imagePass != tempFilePath) {
+                val selectedImage = BitmapFactory.decodeResource(resources, ImageId)
+                val tempFile = File.createTempFile("temp_image", ".jpg", cacheDir)
+                val tempFilePath = tempFile.absolutePath
+                val outputStream = FileOutputStream(tempFile)
+                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                outputStream.close()
+                imagePass = tempFilePath
             }
 
 
-            if(title.isNotEmpty()){
-                val cont = Content(imagePass,title,desc)
-                intent.putExtra("content",cont)
-                setResult(RESULT_OK,intent)
+            if (title.isNotEmpty()) {
+                val cont = Content(imagePass, title, desc)
+                intent.putExtra("content", cont)
+                setResult(RESULT_OK, intent)
                 finish()
 
+            } else Toast.makeText(
+                this@EditActivity,
+                "Заполение заголовка обязательно",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+
+//        bChooseImage.setOnClickListener {
+//            if (ContextCompat.checkSelfPermission(this@EditActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+//
+//                ActivityCompat.requestPermissions(this@EditActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), READ_EXTERNAL_STORAGE_PERMISSION_REQUEST)}
+//            else{openImagePicker()}
+//        }
+            bChooseImage.setOnClickListener {
+//                if (ContextCompat.checkSelfPermission(
+//                        this@EditActivity,
+//                        Manifest.permission.READ_EXTERNAL_STORAGE
+//                    ) != PackageManager.PERMISSION_GRANTED
+//                ) {
+//                    ActivityCompat.requestPermissions(
+//                        this@EditActivity,
+//                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+//                        READ_EXTERNAL_STORAGE_PERMISSION_REQUEST
+//                    )
+//                } else {
+//                    // Разрешение уже предоставлено, откройте выбор изображения.
+//                    openImagePicker()
+//                }
+                openImagePicker()
             }
-            else Toast.makeText(this@EditActivity,"Заполение заголовка обязательно", Toast.LENGTH_SHORT ).show()
-
         }
-        bChooseImage.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this@EditActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-
-                ActivityCompat.requestPermissions(this@EditActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), READ_EXTERNAL_STORAGE_PERMISSION_REQUEST)}
-            else{openImagePicker()}
-        }
-        floatingActionButton4.setOnClickListener { finish() }
 
 
-    }
+
+
     private fun openImagePicker() {
         val pickImageIntent = Intent(Intent.ACTION_PICK)
         pickImageIntent.type = "image/*"
