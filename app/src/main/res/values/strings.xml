@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Заметки с фотографиями</string>
+    <string-array name="names">
+        <item>Егор</item>
+        <item>Миша</item>
+        <item>Рома</item>
+        <item>Ауе</item>
+        <item>Колян</item>
+    </string-array>
+</resources>

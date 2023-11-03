@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Klicker" parent="Theme.Material3.DayNight.NoActionBar">
+
+    </style>
+
+    <style name="Theme.Klicker" parent="Base.Theme.Klicker" >
+        <item name="colorPrimary">@color/chocolate</item>
+        <item name="colorPrimaryVariant">@color/chocolate</item>
+
+    </style>
+
+</resources>
